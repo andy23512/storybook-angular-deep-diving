@@ -2,7 +2,9 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
+  template: `
+    <inbox-screen></inbox-screen>
+  `,
   styleUrls: ['./app.component.less']
 })
 export class AppComponent {

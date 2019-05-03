@@ -3,7 +3,8 @@ import { Task } from '../task.model';
 
 export const actions = {
   ARCHIVE_TASK: 'ARCHIVE_TASK',
-  PIN_TASK: 'PIN_TASK'
+  PIN_TASK: 'PIN_TASK',
+  ERROR_FROM_SERVER: 'ERROR_FROM_SERVER'
 };
 
 export class ArchiveTask {
@@ -18,6 +19,12 @@ export class PinTask {
   constructor(public payload: string) {}
 }
 
+export class ErrorFromServer {
+  static readonly type = actions.ERROR_FROM_SERVER;
+
+  constructor(public message: string) {}
+}
+
 // The initial state of our store when the app loads.
 // Usually you would fetch this from a server
 const defaultTasks = {
@@ -29,12 +36,14 @@ const defaultTasks = {
 
 export class TaskStateModel {
   entities: { [id: number]: Task };
+  error: any;
 }
 
 @State<TaskStateModel>({
   name: 'tasks',
   defaults: {
-    entities: defaultTasks
+    entities: defaultTasks,
+    error: null
   }
 })
 export class TasksState {
@@ -76,5 +85,13 @@ export class TasksState {
     patchState({
       entities
     });
+  }
+
+  @Action(ErrorFromServer)
+  ErrorFromServer(
+    { patchState, getState }: StateContext<TaskStateModel>,
+    { message }: ErrorFromServer
+  ) {
+    patchState({ error: message });
   }
 }
